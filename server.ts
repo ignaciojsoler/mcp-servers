@@ -62,3 +62,73 @@ server.tool(
     };
   },
 );
+
+// Registering a static resource on the MCP server
+server.resource(
+  // Resource name: internal name used to identify the resource
+  "airports",
+
+  // Resource URI: unique identifier for this resource
+  "flights://airports",
+
+  // Resource metadata: describes the resource
+  {
+    // Human-readable description of what the resource contains
+    description: "List of supported airport codes",
+
+    // MIME type: describes the format of the resource content
+    mimeType: "text/plain",
+  },
+
+  // Read callback: executed when the client requests this resource
+  async (uri) => {
+    return {
+      // Contents: the actual data returned by the resource
+      contents: [
+        {
+          // URI of the resource being returned
+          uri: uri.href,
+
+          // MIME type of the returned content
+          mimeType: "text/plain",
+
+          // Actual resource content
+          text: `Supported Airports:
+            - JFK (New York)
+            - LHR (London Heathrow)
+            - SFO (San Francisco)`,
+        },
+      ],
+    };
+  },
+);
+
+/**
+ *  Challenge: Create a static resource for the weather tool
+ * - Use URI: weather://cities
+ * - Return a plain text list of supported cities (e.g., London and New York)
+ * - Set content type to 'text/plain'
+ */
+server.resource(
+  "weather",
+  "weather://cities",
+  {
+    description:
+      "Return a plain text list of supported cities (e.g., London and New York)",
+    mimeType: "text/plain",
+  },
+  async (uri) => {
+    return {
+      contents: [
+        {
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: `Supported Cities:
+            - New York (USA)
+            - London (UK)
+        `,
+        },
+      ],
+    };
+  },
+);
